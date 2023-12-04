@@ -18,10 +18,9 @@ export interface Card {
 
 interface Props {
   cardItem?: Card;
-  onSave: (cardItem: Card) => void;
 }
 
-const TextCard = ({ cardItem, onSave }: Props) => {
+const TextCard = ({ cardItem }: Props) => {
   let [textValue, setTextValue] = useState("");
   let cardInputItem: Card = {
     id: 1,
@@ -38,7 +37,7 @@ const TextCard = ({ cardItem, onSave }: Props) => {
     event.preventDefault();
     if (textValue) {
       cardInputItem.data = textValue;
-      onSave(cardInputItem);
+      console.log(cardInputItem);
     }
   };
 

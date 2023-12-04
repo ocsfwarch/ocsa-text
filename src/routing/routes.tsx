@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <TextCard onSave={() => console.log("onSave called")} />,
+        element: <TextCard />,
       },
       {
         path: "about",
