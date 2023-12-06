@@ -44,8 +44,11 @@ const TextCard = () => {
     return () => controller.abort();
   }, []);
 
-  const handleSubmit = () => {
-    console.log(card);
+  const handleCardSave = () => {
+    axios
+      .post("http://localhost:5000/textcard/save", card)
+      .then((res) => setCard(res.data))
+      .catch((err) => setError(err.message));
   };
 
   const handleCancel = () => {};
@@ -69,7 +72,7 @@ const TextCard = () => {
           </InputGroup>
           <HStack marginTop={3}>
             <Button
-              onClick={() => handleSubmit()}
+              onClick={() => handleCardSave()}
               type="button"
               isDisabled={!card.data.length}
             >
