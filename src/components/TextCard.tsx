@@ -11,7 +11,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { getLocalDate } from "../Utils/DateTimeUtils";
-import axios, { CanceledError } from "axios";
+import apiClient, { CanceledError } from "../services/api-client";
 
 export interface Card {
   id: number;
@@ -30,8 +30,8 @@ const TextCard = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    axios
-      .get("http://localhost:5000/textcard", { signal: controller.signal })
+    apiClient
+      .get("/", { signal: controller.signal })
       .then((res) => {
         console.log(res.data);
         setCard(res.data);
@@ -45,8 +45,8 @@ const TextCard = () => {
   }, []);
 
   const handleCardSave = () => {
-    axios
-      .post("http://localhost:5000/textcard/save", card)
+    apiClient
+      .post("/save", card)
       .then((res) => setCard(res.data))
       .catch((err) => setError(err.message));
   };
