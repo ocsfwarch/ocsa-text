@@ -10,44 +10,36 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { getLocalDate } from "../Utils/DateTimeUtils";
-import apiClient, { CanceledError } from "../services/api-client";
-
-export interface Card {
-  id: number;
-  header: string;
-  data: string;
-}
-
-interface Props {
-  cardItem?: Card;
-}
+//import { getLocalDate } from "../Utils/DateTimeUtils";
+import apiClient, { CanceledError } from "../services/ApiClient";
+import CardService, { DataCard } from "../services/CardService";
 
 const TextCard = () => {
-  let [card, setCard] = useState<Card>({ id: 1, header: "", data: "" });
+  let [dataCard, setDataCard] = useState<DataCard>({
+    id: 1,
+    header: "",
+    data: "",
+  });
   let [error, setError] = useState("");
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    apiClient
-      .get("/", { signal: controller.signal })
+    const { request, cancel } = CardService.getACard();
+    request
       .then((res) => {
         console.log(res.data);
-        setCard(res.data);
+        setDataCard(res.data);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
       });
 
-    return () => controller.abort();
+    return () => cancel();
   }, []);
 
   const handleCardSave = () => {
-    apiClient
-      .post("/save", card)
-      .then((res) => setCard(res.data))
+    CardService.saveACard(dataCard)
+      .then((res) => setDataCard(res.data))
       .catch((err) => setError(err.message));
   };
 
@@ -56,14 +48,14 @@ const TextCard = () => {
     <>
       {error && <Text color="red">{error}</Text>}
       <Card>
-        <CardHeader>{card.header}</CardHeader>
+        <CardHeader>{dataCard.header}</CardHeader>
         <CardBody>
           <InputGroup>
             <Textarea
               id="TextInput"
-              value={card.data}
+              value={dataCard.data}
               onChange={(event) =>
-                setCard({ ...card, data: event.target.value })
+                setDataCard({ ...dataCard, data: event.target.value })
               }
               borderRadius={20}
               placeholder="Add text here..."
@@ -74,7 +66,7 @@ const TextCard = () => {
             <Button
               onClick={() => handleCardSave()}
               type="button"
-              isDisabled={!card.data.length}
+              isDisabled={!dataCard.data.length}
             >
               Save
             </Button>
