@@ -7,9 +7,10 @@ export interface DataCard {
 }
 
 class CardService {
-    getACard() {
+    getACard(date: Date) {
         const controller = new AbortController();
-        const request = ApiClient.get<DataCard>("/", { signal: controller.signal })
+        const path = date ? `/retrieve/${date}` : `/retrieve`
+        const request = ApiClient.get<DataCard>(path, { signal: controller.signal })
         return { request, cancel: () => controller.abort() }
     }
 

@@ -13,17 +13,21 @@ import {
 //import { getLocalDate } from "../Utils/DateTimeUtils";
 import apiClient, { CanceledError } from "../services/ApiClient";
 import CardService, { DataCard } from "../services/CardService";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const TextCard = () => {
-  let [dataCard, setDataCard] = useState<DataCard>({
+  const [dataCard, setDataCard] = useState<DataCard>({
     id: 1,
     header: "",
     data: "",
   });
-  let [error, setError] = useState("");
+  const [error, setError] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
-    const { request, cancel } = CardService.getACard();
+    console.log(`useEffect ${startDate}`);
+    const { request, cancel } = CardService.getACard(startDate);
     request
       .then((res) => {
         console.log(res.data);
@@ -35,7 +39,7 @@ const TextCard = () => {
       });
 
     return () => cancel();
-  }, []);
+  }, [startDate]);
 
   const handleCardSave = () => {
     CardService.saveACard(dataCard)
@@ -44,11 +48,25 @@ const TextCard = () => {
   };
 
   const handleCancel = () => {};
+
+  const handleDateChange = (date: Date) => {
+    console.log(`handleDateChange...`);
+    setStartDate(date);
+    // Redirect to selected date
+    //navigate(`/${date}`);
+  };
+
   return (
     <>
       {error && <Text color="red">{error}</Text>}
       <Card>
-        <CardHeader>{dataCard.header}</CardHeader>
+        <CardHeader>
+          {" "}
+          <DatePicker
+            selected={startDate}
+            onChange={(date: Date) => handleDateChange(date)}
+          />
+        </CardHeader>
         <CardBody>
           <InputGroup>
             <Textarea
