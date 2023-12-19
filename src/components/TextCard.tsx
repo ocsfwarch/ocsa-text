@@ -26,11 +26,11 @@ const TextCard = () => {
   const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
-    console.log(`useEffect ${startDate}`);
+    //console.log(`useEffect ${startDate}`);
     const { request, cancel } = CardService.getACard(startDate);
     request
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setDataCard(res.data);
       })
       .catch((err) => {
@@ -50,7 +50,7 @@ const TextCard = () => {
   const handleCancel = () => {};
 
   const handleDateChange = (date: Date) => {
-    console.log(`handleDateChange...`);
+    //console.log(`handleDateChange...`);
     setStartDate(date);
     // Redirect to selected date
     //navigate(`/${date}`);

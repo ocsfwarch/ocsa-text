@@ -1,7 +1,12 @@
 import axios, { CanceledError } from "axios";
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+const bearerToken = import.meta.env.VITE_APP_BEARER_TOKEN;
 
 export default axios.create({
-    baseURL: 'http://localhost:5000/textcard'
+    baseURL: baseUrl,
+    headers: {
+        Authorization: bearerToken
+    }
 })
 
 export { CanceledError }
